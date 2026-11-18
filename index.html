@@ -9,7 +9,7 @@
   --bg0:#0c0a13;
   --surface:rgba(23,17,40,.82); --surface2:rgba(35,26,60,.9); --surface3:rgba(48,36,82,.94);
   --line:rgba(163,132,255,.18); --line2:rgba(163,132,255,.36);
-  --text:#f2ecff; --dim:#a297c6; --faint:#6f6595;
+  --text:#f2ecff; --dim:#a297c6; --faint:#a99fd0;
   --violet:#7c3aed; --magenta:#ff3d8e; --coral:#ff5c39; --amber:#ffb02e;
   --acid:#c8f04a; --cyan:#39d0ff; --blue:#4c8dff;
   --ok:#3ddc84; --warn:#ffb02e; --danger:#ff4d5e; --info:#39d0ff;
@@ -35,7 +35,6 @@ body{background:var(--bg0);color:var(--text);font:13px/1.45 -apple-system,"Segoe
 #topbar{flex:0 0 52px;display:flex;align-items:center;gap:7px;padding:0 12px;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
 .wordmark{font-weight:800;font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
 .wordmark small{font-weight:500;font-size:10px;letter-spacing:.14em;color:var(--faint);-webkit-text-fill-color:var(--faint);display:block;margin-top:-3px}
-.ver{flex:0 0 auto;font-size:9.5px;font-weight:800;letter-spacing:.08em;color:#0d2b1a;background:var(--ok);border-radius:6px;padding:2px 6px;box-shadow:0 0 14px rgba(61,220,132,.45)}
 #projName{width:104px;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--dim);padding:5px 8px;font:inherit}
 #projName:hover,#projName:focus{border-color:var(--line);background:rgba(124,58,237,.08);color:var(--text);outline:none}
 .spacer{flex:1}
@@ -85,7 +84,7 @@ button:disabled{opacity:.3;cursor:default;transform:none}
 #anchorMark{position:absolute;z-index:3;width:12px;height:12px;margin:-6px 0 0 -6px;border:2px solid var(--cyan);transform:rotate(45deg);pointer-events:none;display:none;opacity:.6;box-shadow:0 0 12px rgba(57,208,255,.6)}
 #vsliders{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;z-index:5}
 .vs{display:flex;flex-direction:column;align-items:center;gap:6px}
-.vs .glyph{color:#6b6480;font-size:10px;letter-spacing:.1em;font-weight:700}
+.vs .glyph{color:#a99fd0;font-size:10px;letter-spacing:.1em;font-weight:700}
 .vs .track{position:relative;width:30px;height:158px;border-radius:16px;background:rgba(28,22,48,.82);border:1px solid var(--line2);backdrop-filter:blur(12px);cursor:ns-resize;touch-action:none;overflow:hidden;box-shadow:var(--shadow)}
 .vs .fill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,var(--magenta),var(--violet));opacity:.9}
 .vs .thumb{position:absolute;left:3px;right:3px;height:4px;border-radius:3px;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);transform:translateY(50%)}
@@ -149,10 +148,10 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 #viewPad button.on{background:var(--grad);color:#fff}
 #quickBar{display:none;position:absolute;left:0;right:0;bottom:0;z-index:7;height:var(--qb);flex-direction:column;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line2);box-shadow:0 -12px 34px rgba(4,2,12,.4)}
 #quickBar .qrow{display:flex;align-items:center;gap:6px}
-#qBrushes{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+#quickBar #qBrushes{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
 #qBrushes button{padding:6px 2px;border-radius:9px;font-size:10px;color:var(--dim)}
 #qBrushes button.active{background:var(--grad);border-color:transparent;color:#fff;font-weight:700}
-#quickBar label{font-size:9.5px;letter-spacing:.08em;color:var(--faint);font-weight:700;flex:0 0 auto}
+#quickBar label{font-size:10.5px;letter-spacing:.08em;color:var(--faint);font-weight:700;flex:0 0 auto}
 #quickBar input[type=range]{height:26px}
 #qMode{flex:1.5}
 #qMode button{padding:8px 2px;font-size:11px}
@@ -232,15 +231,31 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
   #hud span{font-size:10px;padding:3px 8px}
   dialog{padding:18px 16px}
   dialog table{font-size:11px}
+  dialog{overflow-x:hidden}
+  dialog td:first-child{white-space:normal;overflow-wrap:anywhere}
+  body.kb{--qb:0px}
+  body.kb #quickBar,body.kb #vsliders,body.kb #hint{display:none}
+  body.kb #dock{bottom:8px}
+}
+@media (max-width:900px) and (max-height:480px){
+  :root{--qb:calc(92px + env(safe-area-inset-bottom,0px))}
+  #quickBar{gap:3px;padding:4px 10px calc(4px + env(safe-area-inset-bottom,0px))}
+  #qBrushes button{padding:3px 2px}
+  #quickBar input[type=range]{height:20px}
+  #quickBar .qbtns>button,#qMode button{padding:4px 2px}
+  .vs .track{height:46px}
+  #vsliders{gap:8px;bottom:calc(var(--qb) + 8px)}
+  .vs .glyph{display:none}
+  #dock.open{max-height:calc(100% - var(--qb) - 20px)}
 }
 @media (max-width:430px){
+  body:has(#recOverlay.on) #hud{top:62px}
   #topbar{gap:4px;padding:0 8px}
   .iconbtn{width:33px;height:33px;border-radius:10px}
   .iconbtn svg{width:17px;height:17px}
   #colorDot{width:25px;height:25px}
   .wordmark{font-size:13px}
-  .ver{font-size:9px;padding:2px 5px}
-}
+  }
 </style>
 </head>
 <body>
@@ -248,7 +263,6 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
 <div id="app">
   <header id="topbar">
     <div class="wordmark">InkSpace<small>DRAW IN 3D</small></div>
-    <span class="ver" id="verBadge" title="Build 6 — touch routing + settings migration">v6</span>
     <input id="projName" type="text" value="Untitled" spellcheck="false">
     <button class="iconbtn" id="btnUndo" title="Undo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 5L3 10l5 5"/><path d="M3 10h11a6 6 0 0 1 0 12h-4"/></svg></button>
     <button class="iconbtn" id="btnRedo" title="Redo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 5l5 5-5 5"/><path d="M21 10H10a6 6 0 0 0 0 12h4"/></svg></button>
@@ -343,7 +357,8 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
       <div class="qrow"><label>SIZE</label><input type="range" id="qSize" min="1" max="120" value="18"><label>OPAC</label><input type="range" id="qOpacity" min="5" max="100" value="100"></div>
       <div class="qrow qbtns">
         <div class="seg" id="qMode"><button data-finger="1">✏️ Draw</button><button data-finger="0">🖐 Spin</button></div>
-        <button id="qSpinL">⟲90°</button><button id="qSpinR">⟳90°</button>
+        <button id="qSpinL" title="Spin 90° left">⟲</button><button id="qSpinR" title="Spin 90° right">⟳</button>
+        <button id="qHome" title="Reset view">⌂</button><button id="qAxis" title="Straight axis line">⟂</button>
         <button id="qSnap" class="on">⊙</button><button id="qLayers">☰</button>
       </div>
     </div>
@@ -439,7 +454,9 @@ const BRUSHES=[
 const state={tool:'brush',brush:0,size:18,opacity:100,stab:45,taper:65,grain:35,
   pressure:true,pressureAlpha:false,finger:true,whole:false,erPx:26,color:'#1b1626',
   depth:0,ghost:true,muted:false,space:false,paper:'white',autoSpin:false,spinSpeed:30,
-  snap:'all',snapRadius:coarse?30:22,keepDepth:true,axisSnap:true,showAnchor:true};
+  snap:'all',snapRadius:coarse?30:22,keepDepth:true,axisSnap:true,showAnchor:true,axisHeld:false};
+const sz=()=>state.tool==='eraser'?state.erPx:state.size;
+const setSz=v=>{if(state.tool==='eraser')state.erPx=Math.round(clamp(v,4,120));else state.size=v;};
 const halfWidth=()=>state.size*0.06*BRUSHES[state.brush].mul;
 const paperHex=()=>state.paper==='dark'?'#0c0a13':state.paper==='cream'?'#fbf6ec':'#ffffff';
 let autoAnim=false,orderCounter=0;
@@ -598,7 +615,18 @@ function detectCorners(pts){
   return out.sort((x,y)=>x-y);}
 
 const allStrokes=[],chunks=new Map();
-function newLayer(name){return {id:'l'+(++lid)+Date.now().toString(36),name,visible:true,opacity:1};}
+const LKEYS=['brush','size','opacity','stab','taper','grain','pressure','pressureAlpha'];
+const LDEF={brush:0,size:18,opacity:100,stab:45,taper:65,grain:35,pressure:true,pressureAlpha:false};
+const grabSet=()=>{const o={};for(const k of LKEYS)o[k]=state[k];return o;};
+let lastActiveId=null;
+function syncLayerSettings(){
+  if(activeLayerId===lastActiveId)return;
+  const old=layers.find(l=>l.id===lastActiveId);if(old)old.set=grabSet();
+  lastActiveId=activeLayerId;
+  const cur=layers.find(l=>l.id===activeLayerId);if(!cur)return;
+  if(cur.set){Object.assign(state,LDEF,cur.set);G.uGrain.value=state.grain/100;syncUI();}
+  else cur.set=grabSet();}
+function newLayer(name){return {id:'l'+(++lid)+Date.now().toString(36),name,visible:true,opacity:1,set:{...LDEF}};}
 function getChunk(s){const k=s.layer+'|'+s.brush;let c=chunks.get(k);
   if(!c){const mesh=new THREE.Mesh(new THREE.BufferGeometry(),getMat(s.layer,s.brush));
     mesh.frustumCulled=false;mesh.visible=false;scene.add(mesh);
@@ -706,10 +734,12 @@ function findSnap(cx,cy,exclude){
     if(_sp.z>1)return;
     const sx=(_sp.x+1)/2*rect.width,sy=(1-_sp.y)/2*rect.height;
     const d2=(sx-px)*(sx-px)+(sy-py)*(sy-py);
-    if(d2>R2)return;
+    if(d2>(pri===1?R2*.36:R2))return;
     if(pri>bestPri||(pri===bestPri&&(d2<bestD2-1||(Math.abs(d2-bestD2)<=1&&dcam<bestCam)))){
       bestPri=pri;bestD2=d2;bestCam=dcam;
       best={point:V3(x,y,z),kind:pri===2?'corner':'point',stroke:s};}};
+  if(draw.active&&draw.mode==='brush'&&draw.left&&draw.pts.length){
+    const st=draw.pts[0];test({pts:[st.x,st.y,st.z]},0,2);}
   for(const s of allStrokes){
     if(s===exclude)continue;
     const layer=layers.find(l=>l.id===s.layer);if(!layer||!layer.visible)continue;
@@ -767,9 +797,11 @@ function makeStroke(pts,prs,brush,color,size,opacity,layerId,pOn,pAOn,taper){
 
 const draw={active:false,id:null,mode:'brush',filter:null,pts:[],prs:[],tail:null,tailPr:1,
   hadPen:false,eraseOps:[],lastErase:0,lastT:0,snapPoint:null,straight:false};
-const liveMesh=new THREE.Mesh(new THREE.BufferGeometry(),getMat('x',0));
+const liveDummy=new THREE.MeshBasicMaterial();
+const liveMesh=new THREE.Mesh(new THREE.BufferGeometry(),liveDummy);
 liveMesh.frustumCulled=false;liveMesh.visible=false;liveMesh.renderOrder=999;scene.add(liveMesh);
 function pressVal(e){return draw.hadPen&&state.pressure?(e.pressure>0?e.pressure:.5):1;}
+let liveDirty=false;
 function liveRebuild(){
   const pts=draw.tail?[...draw.pts,draw.tail]:draw.pts;
   if(pts.length<2){liveMesh.visible=false;return;}
@@ -787,46 +819,53 @@ function beginStroke(e){
   if(hit){sessionAnchor=hit.point.clone();p=hit.point.clone();
     if(state.keepDepth)pinAnchor(hit.point);
     ghostUntil=performance.now()+1200;
-    toast('Locked to '+hit.kind+' — sheet passes through it','ok');}
+    if(!window._snapToast){window._snapToast=1;toast('Locked to '+hit.kind+' — sheet passes through it','ok');}}
   else{sessionAnchor=null;p=sampleWorld(e.clientX,e.clientY);}
   if(!p)return false;
   draw.active=true;draw.filter=makeFilter();draw.hadPen=e.pointerType==='pen';
   draw.filter.set(p);
   draw.pts=[p];draw.prs=[draw.filter.pr(pressVal(e))];draw.tail=null;draw.eraseOps=[];
   draw.lastT=e.timeStamp;draw.snapPoint=hit?hit.point:null;draw.straight=false;
+  draw.endSnap=null;draw.left=false;draw.sx=e.clientX;draw.sy=e.clientY;draw.qx=-1e9;draw.qy=-1e9;draw.qT=0;draw.qHit=null;
   snapHit=null;return true;}
 function beginErase(e){
   draw.active=true;draw.hadPen=e.pointerType==='pen';draw.eraseOps=[];draw.lastErase=0;
   eraseAt(e.clientX,e.clientY);}
 function appendSample(e){
   const start=draw.pts[0];
-  const hit=findSnap(e.clientX,e.clientY,null);
-  let p,snapped=false;
-  if(hit&&hit.point.distanceTo(start)>1e-5){p=hit.point.clone();snapped=true;}
-  else p=sampleWorld(e.clientX,e.clientY);
+  if(!draw.left&&Math.hypot(e.clientX-draw.sx,e.clientY-draw.sy)>state.snapRadius*1.5)draw.left=true;
+  /* #18 throttle snap search: reuse result for <8ms or <3px moves */
+  const nowT=performance.now();let hit;
+  if(Math.hypot(e.clientX-draw.qx,e.clientY-draw.qy)<3)hit=draw.qHit;
+  else{hit=findSnap(e.clientX,e.clientY,null);draw.qHit=hit;draw.qT=nowT;draw.qx=e.clientX;draw.qy=e.clientY;}
+  let p;const snapped=false;
+  const okHit=hit&&(draw.left||hit.point.distanceTo(start)>1e-5);
+  draw.endSnap=okHit?hit.point.clone():null;
+  p=sampleWorld(e.clientX,e.clientY);
   if(!p)return;
   let f,pr=draw.filter.pr(pressVal(e));
-  if(e.shiftKey&&state.axisSnap){
+  if((e.shiftKey||state.axisHeld)&&state.axisSnap){
     const c=constrainAxis(start,p);
     updateAxisGuide(start,c.idx);
     draw.pts=[start];draw.prs=[draw.prs[0]];draw.tail=c.point;draw.tailPr=pr;
-    draw.straight=true;draw.snapPoint=null;
-    liveRebuild();scratchSound(600);return;}
+    draw.straight=true;draw.snapPoint=null;draw.endSnap=null;
+    liveDirty=true;scratchSound(600);return;}
   axisLines.visible=false;draw.straight=false;
-  if(snapped){draw.filter.set(p);f=p;draw.snapPoint=p;}
-  else{f=draw.filter.p(p.x,p.y,p.z,e.timeStamp);draw.snapPoint=null;}
+  f=draw.filter.p(p.x,p.y,p.z,e.timeStamp);draw.snapPoint=draw.endSnap;
   const last=draw.pts[draw.pts.length-1],minD=Math.max(.25*halfWidth(),.03),dist=f.distanceTo(last);
   const dt=Math.max(1,e.timeStamp-draw.lastT);draw.lastT=e.timeStamp;
   if(dist>=minD||snapped){draw.pts.push(f);draw.prs.push(pr);draw.tail=null;
     if(draw.pts.length>4000){draw.pts.splice(0,500);draw.prs.splice(0,500);}}
   else{draw.tail=f;draw.tailPr=pr;}
-  liveRebuild();scratchSound(dist/dt*1000);}
+  liveDirty=true;scratchSound(dist/dt*1000);}
 function commitStroke(){
   liveMesh.visible=false;liveMesh.geometry.dispose();liveMesh.geometry=new THREE.BufferGeometry();
   axisLines.visible=false;
   let pts=draw.tail?[...draw.pts,draw.tail]:draw.pts.slice();
   let prs=draw.tail?[...draw.prs,draw.tailPr]:draw.prs.slice();
   const hw=halfWidth();
+  if(draw.endSnap&&!draw.straight&&pts.length>=2){pts[pts.length-1]=draw.endSnap.clone();}
+  draw.endSnap=null;
   if(pts.length<2){const right=V3().setFromMatrixColumn(camera.matrixWorld,0);
     pts=[pts[0],pts[0].clone().addScaledVector(right,.05)];prs=[prs[0],prs[0]];}
   let res,outPr;
@@ -845,6 +884,16 @@ function commitStroke(){
   if(sessionAnchor&&state.keepDepth){depthAnchor.copy(sessionAnchor);anchorLocked=true;state.depth=0;syncDepthUI();}
   sessionAnchor=null;draw.snapPoint=null;
   pushRecent(state.color);$('hint').classList.add('gone');}
+function abortStroke(){
+  liveMesh.visible=false;liveMesh.geometry.dispose();liveMesh.geometry=new THREE.BufferGeometry();
+  axisLines.visible=false;liveDirty=false;
+  draw.active=false;draw.id=null;draw.pts=[];draw.prs=[];draw.tail=null;draw.eraseOps=[];
+  sessionAnchor=null;draw.snapPoint=null;scratchSound(0);}
+function strokeTrivial(){
+  if(draw.mode!=='brush')return false;
+  let L=0;const a=draw.tail?[...draw.pts,draw.tail]:draw.pts;
+  for(let i=1;i<a.length;i++)L+=a[i].distanceTo(a[i-1]);
+  return L<Math.max(halfWidth()*2,.1);}
 function endStroke(){
   if(!draw.active)return;
   if(draw.mode==='erase')endErase();else if(draw.pts.length)commitStroke();
@@ -1036,7 +1085,7 @@ stage.addEventListener('pointerdown',e=>{
         showGesture('1 finger · spin');
       }
     }else{
-      if(draw.active){endStroke();drawTouchId=null;}
+      if(draw.active){if(strokeTrivial())abortStroke();else endStroke();drawTouchId=null;}
       gesture=makeGesture();
       showGesture(gesture.mode==='pan'?'3 fingers · pan':'2 fingers · spin + pinch');
     }
@@ -1068,7 +1117,7 @@ stage.addEventListener('pointermove',e=>{
     const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
     for(const s of (evs.length?evs:[e])){if(draw.mode==='erase')eraseAt(s.clientX,s.clientY);else appendSample(s);}
     return;}
-  if(e.pointerType==='mouse'){
+  if(e.pointerType==='mouse'||e.pointerType==='pen'){
     if(e.target===canvas&&state.tool==='brush'&&!autoAnim){
       snapHit=findSnap(e.clientX,e.clientY,null);
       if(snapHit)ghostUntil=Math.max(ghostUntil,performance.now()+260);}
@@ -1087,7 +1136,7 @@ stage.addEventListener('pointerup',releasePointer,{capture:true});
 stage.addEventListener('pointercancel',releasePointer,{capture:true});
 stage.addEventListener('lostpointercapture',e=>{
   if(e.pointerType==='touch'&&touches.has(e.pointerId))dropTouch(e.pointerId);},{capture:true});
-stage.addEventListener('pointerleave',e=>{if(!draw.active&&e.pointerType==='mouse')snapHit=null;});
+stage.addEventListener('pointerleave',e=>{if(!draw.active&&(e.pointerType==='mouse'||e.pointerType==='pen'))snapHit=null;});
 stage.addEventListener('wheel',e=>{
   if(e.target!==canvas||!e.shiftKey)return;
   e.stopPropagation();e.preventDefault();
@@ -1103,7 +1152,8 @@ function setTool(t){
   controls.mouseButtons.LEFT=(t==='spin'||state.space)?THREE.MOUSE.ROTATE:null;
   canvas.style.cursor=t==='spin'?'grab':t==='eraser'?'cell':'crosshair';
   if(t!=='brush')snapHit=null;
-  updateChip();syncQuick();}
+  syncSize();updateChip();syncQuick();
+  if(t==='eraser'&&coarse&&!window._erTip){window._erTip=1;toast('Tap Eraser again: whole stroke ↔ partial · size slider sets radius','ok');}}
 $('toolBrush').onclick=()=>setTool('brush');
 $('toolEraser').onclick=()=>{if(state.tool==='eraser'){state.whole=!state.whole;toast(state.whole?'Eraser: whole stroke':'Eraser: partial','warn');}setTool('eraser');};
 $('toolSpin').onclick=()=>setTool('spin');
@@ -1130,9 +1180,14 @@ window.addEventListener('keydown',e=>{
   else if(k==='f')frameView();
   else if(k==='p')setAutoSpin(!state.autoSpin);
   else if(k>='1'&&k<='5')selectBrush(Number(k)-1);
-  else if(k==='['||k===']'){state.size=clamp(state.size*(k===']'?1.15:1/1.15),1,120);syncSize();}});
+  else if(k==='['||k===']'){setSz(clamp(sz()*(k===']'?1.15:1/1.15),1,120));syncSize();}});
 window.addEventListener('keyup',e=>{if(e.code==='Space'){state.space=false;controls.mouseButtons.LEFT=state.tool==='spin'?THREE.MOUSE.ROTATE:null;}});
 function panic(){endStroke();drawTouchId=null;touches.clear();gesture=null;}
+function touchWatchdog(e){if(e.touches&&e.touches.length===0&&touches.size){
+  for(const id of [...touches.keys()])dropTouch(id);touches.clear();gesture=null;drawTouchId=null;}}
+document.addEventListener('touchend',touchWatchdog,{passive:true,capture:true});
+document.addEventListener('touchcancel',touchWatchdog,{passive:true,capture:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)panic();});
 window.addEventListener('blur',panic);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)panic();});
 
@@ -1154,21 +1209,26 @@ $('btnFixTouch').onclick=()=>{setFinger(true,false);setTool('brush');state.snapR
   toast('Touch mode reset — one finger draws','ok');};
 $('btnHelp2').onclick=()=>{$('help').showModal();closePops();};
 
-function insertFace(quiet){
+function insertFace(quiet,defer){
   const center=planePoint();
   const right=V3().setFromMatrixColumn(camera.matrixWorld,0).normalize();
   const up=V3().setFromMatrixColumn(camera.matrixWorld,1).normalize();
   const s=clamp(camDist()*.2,8,70);
   const pts=[[-1,-1],[1,-1],[1,1],[-1,1],[-1,-1]].map(([a,b])=>center.clone().addScaledVector(right,a*s).addScaledVector(up,b*s));
   const st=makeStroke(pts,pts.map(()=>1),state.brush,state.color,state.size,state.opacity,activeLayerId,false,false,6);
-  buildStrokeGeo(st);doCmd({type:'add',stroke:st});
+  buildStrokeGeo(st);const addCmd={type:'add',stroke:st};
+  if(defer)applyCmd(addCmd,true);else doCmd(addCmd);
   pinAnchor(center);
+  if(defer)return addCmd;
   if(!quiet)toast('Face inserted — spin 90° and draw from a glowing corner','ok');}
 $('btnFace').onclick=()=>insertFace(false);
 $('btnCubeDemo').onclick=()=>{
   const l=newLayer('Cube');
-  doCmd({type:'layerAdd',layer:l,index:layers.length,setActive:true});
-  insertFace(true);
+  const lc={type:'layerAdd',layer:l,index:layers.length,setActive:true};
+  applyCmd(lc,true);
+  const fc=insertFace(true,true);
+  if(fc){undoStack.push({type:'compound',cmds:[lc,fc]});if(undoStack.length>120)undoStack.shift();redoStack.length=0;afterMutate();}
+  else{undoStack.push(lc);afterMutate();}
   toast('Front face ready · spin 90° then draw from a magenta corner','ok');
   $('hint').classList.remove('gone');};
 
@@ -1261,14 +1321,14 @@ function kvKeys(){return new Promise((res,rej)=>{const t=db.transaction('kv').ob
 function serialize(){return {version:SCHEMA,name:$('projName').value,
   strokes:allStrokes.map(s=>({layer:s.layer,brush:s.brush,color:s.color,size:s.size,opacity:s.opacity,
     pts:Array.from(s.pts),w:Array.from(s.w),a:Array.from(s.a),order:s.order})),
-  layers:layers.map(l=>({id:l.id,name:l.name,visible:l.visible,opacity:l.opacity})),
+  layers:(()=>{const a=layers.find(l=>l.id===activeLayerId);if(a)a.set=grabSet();return layers.map(l=>({id:l.id,name:l.name,visible:l.visible,opacity:l.opacity,set:l.set}));})(),
   activeLayerId,orderCounter,camera:{p:camera.position.toArray(),t:controls.target.toArray()},
   anchor:{locked:anchorLocked,p:depthAnchor.toArray()},
   settings:{brush:state.brush,size:state.size,opacity:state.opacity,stab:state.stab,taper:state.taper,
     grain:state.grain,pressure:state.pressure,pressureAlpha:state.pressureAlpha,finger:state.finger,
     color:state.color,depth:state.depth,ghost:state.ghost,muted:state.muted,paper:state.paper,
     spinSpeed:state.spinSpeed,snap:state.snap,snapRadius:state.snapRadius,keepDepth:state.keepDepth,
-    axisSnap:state.axisSnap,showAnchor:state.showAnchor}};}
+    axisSnap:state.axisSnap,showAnchor:state.showAnchor,erPx:state.erPx}};}
 function clearScene(){
   for(const c of chunks.values()){scene.remove(c.mesh);c.mesh.geometry.dispose();}
   chunks.clear();allStrokes.length=0;
@@ -1276,7 +1336,7 @@ function clearScene(){
   matCache.clear();layers=[];activeLayerId=null;
   undoStack.length=0;redoStack.length=0;orderCounter=0;G.uOrderMax.value=1;
   anchorLocked=false;sessionAnchor=null;snapHit=null;
-  liveMesh.material=getMat('x',0);}
+  liveMesh.material=liveDummy;}
 function migrate(d){
   const v=d.version||0;
   if(v<SCHEMA){
@@ -1289,7 +1349,8 @@ function migrate(d){
 function deserialize(d){
   if(!d||(d.version||0)<2)throw new Error('Unsupported file');
   clearScene();
-  layers=(d.layers||[]).map(l=>({id:l.id,name:l.name,visible:l.visible!==false,opacity:typeof l.opacity==='number'?l.opacity:1}));
+  layers=(d.layers||[]).map(l=>({id:l.id,name:l.name,visible:l.visible!==false,opacity:typeof l.opacity==='number'?l.opacity:1,set:l.set}));
+  lastActiveId=null;
   if(!layers.length){const l=newLayer('Layer 1');layers.push(l);}
   lid=layers.length+1;activeLayerId=d.activeLayerId||layers[0].id;
   if(d.settings)Object.assign(state,d.settings);
@@ -1337,23 +1398,25 @@ function exportPNG(){
   renderer.render(scene,camera);
   const w=canvas.width,h=canvas.height,out=document.createElement('canvas');out.width=w;out.height=h;
   const ctx=out.getContext('2d');
-  ctx.fillStyle=paperHex();ctx.fillRect(0,0,w,h);
+  const rec=recState.on;
+  if(!rec){ctx.fillStyle=paperHex();ctx.fillRect(0,0,w,h);}
   const dark=state.paper==='dark';
   let g=ctx.createRadialGradient(w*.18,h*.12,0,w*.18,h*.12,w*.6);
   g.addColorStop(0,dark?'rgba(91,33,182,.55)':'rgba(124,58,237,.10)');g.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  if(!rec){ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
   g=ctx.createRadialGradient(w*.88,h*.92,0,w*.88,h*.92,w*.55);
   g.addColorStop(0,dark?'rgba(14,116,144,.45)':'rgba(57,208,255,.10)');g.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  if(!rec){ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
   ctx.drawImage(canvas,0,0);
   g=ctx.createRadialGradient(w*.5,h*.46,w*.25,w*.5,h*.46,w*.78);
   g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,dark?'rgba(0,0,0,.55)':'rgba(27,22,38,.07)');
-  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  if(!rec){ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
   out.toBlob(b=>{if(b){download(b,($('projName').value||'inkspace')+'.png');toast('PNG exported','ok');}},'image/png');}
 $('btnPng').onclick=exportPNG;$('btnPng2').onclick=()=>{exportPNG();closePops();};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&db)kvSet('autosave',serialize()).catch(()=>{});});
 
 function renderLayers(){
+  syncLayerSettings();
   const list=$('layerList');list.innerHTML='';
   [...layers].reverse().forEach(layer=>{
     const idx=layers.indexOf(layer);
@@ -1398,10 +1461,11 @@ $('layerOpacity').addEventListener('change',e=>{const l=layers.find(x=>x.id===ac
   const after=Number(e.target.value)/100;
   if(Math.abs(after-layerOpBefore)>1e-4)pushApplied({type:'layerOp',id:l.id,before:layerOpBefore,after});});
 $('btnLayerAdd').onclick=()=>{const l=newLayer('Layer '+(layers.length+1));
-  doCmd({type:'layerAdd',layer:l,index:layers.length,setActive:true});};
+  doCmd({type:'layerAdd',layer:l,index:layers.length,setActive:true});
+  anchorLocked=false;sessionAnchor=null;state.depth=0;syncDepthUI();};
 $('btnLayerDup').onclick=()=>{
   const src=layers.find(l=>l.id===activeLayerId);if(!src)return;
-  const l=newLayer(src.name+' copy');
+  const l=newLayer(src.name+' copy');l.set=grabSet();l.opacity=src.opacity;
   const cmds=[{type:'layerAdd',layer:l,index:layers.indexOf(src)+1,setActive:true}];
   for(const s of allStrokes.filter(x=>x.layer===src.id)){
     const k={id:'s'+(++sid)+Date.now().toString(36),layer:l.id,brush:s.brush,color:s.color,size:s.size,
@@ -1450,8 +1514,8 @@ function selectBrush(i){state.brush=i;buildBrushChips();updateChip();scheduleSav
 function updateChip(){
   const b=BRUSHES[state.brush];
   const extra=state.tool==='eraser'?(state.whole?' · erase whole':' · erase'):state.tool==='spin'?' · spin':'';
-  $('brushChip').innerHTML=`<b>${b.name}</b> · ${Math.round(state.size)}${extra}`;
-  $('hudTool').innerHTML=`<b>${state.tool==='brush'?'Brush':state.tool==='eraser'?'Eraser':'Spin'}</b> · ${b.name}`;}
+  $('brushChip').innerHTML=`<b>${b.name}</b> · ${Math.round(sz())}${extra}`;
+  $('hudTool').innerHTML=state.tool==='eraser'?`<b>Eraser</b> · ${state.whole?'whole stroke':'partial'} · ${Math.round(state.erPx)}px`:`<b>${state.tool==='brush'?'Brush':'Spin'}</b> · ${b.name}`;}
 const svCanvas=$('sv'),svCtx=svCanvas.getContext('2d');let hsv=[265,.25,.15];
 function drawSV(){
   const w=svCanvas.width,h=svCanvas.height;
@@ -1488,6 +1552,8 @@ $('btnShuffle').onclick=()=>{
   setColor(palette[2+Math.floor(Math.random()*8)]);toast('Palette shuffled','ok');};
 $('colorDot').onclick=()=>{if(innerWidth<=900)$('dock').classList.add('open');else $('hex').focus();};
 $('dockTab').onclick=()=>{$('dock').classList.toggle('open');};
+$('hex').addEventListener('focus',()=>{if(innerWidth<=900)document.body.classList.add('kb');});
+$('hex').addEventListener('blur',()=>document.body.classList.remove('kb'));
 function bindVS(id,get,set,fmt){
   const el=$(id),track=el.querySelector('.track'),fill=el.querySelector('.fill'),
     thumb=el.querySelector('.thumb'),bubble=el.querySelector('.bubble');
@@ -1498,20 +1564,20 @@ function bindVS(id,get,set,fmt){
   track.addEventListener('pointerup',()=>el.classList.remove('drag'));
   track.addEventListener('pointercancel',()=>el.classList.remove('drag'));
   el._paint=paint;paint();}
-bindVS('vsSize',()=>state.size,p=>{state.size=Math.round(1+p*119);syncSize();},
-  ()=>({pct:(state.size-1)/119*100,label:Math.round(state.size)}));
+bindVS('vsSize',sz,p=>{setSz(Math.round(1+p*119));syncSize();},
+  ()=>({pct:(sz()-1)/119*100,label:Math.round(sz())}));
 bindVS('vsOpacity',()=>state.opacity,p=>{state.opacity=Math.round(5+p*95);syncOpacity();},
   ()=>({pct:(state.opacity-5)/95*100,label:Math.round(state.opacity)+'%'}));
 function syncSize(){
-  $('size').value=Math.round(state.size);$('sizeOut').textContent=Math.round(state.size);
-  $('qSize').value=Math.round(state.size);
+  $('size').value=Math.round(sz());$('sizeOut').textContent=Math.round(sz());
+  $('qSize').value=Math.round(sz());
   $('vsSize')._paint();updateChip();scheduleSave();}
 function syncOpacity(){
   $('opacity').value=Math.round(state.opacity);$('opacityOut').textContent=Math.round(state.opacity)+'%';
   $('qOpacity').value=Math.round(state.opacity);
   $('vsOpacity')._paint();scheduleSave();}
-$('size').addEventListener('input',e=>{state.size=Number(e.target.value);syncSize();});
-$('qSize').addEventListener('input',e=>{state.size=Number(e.target.value);syncSize();});
+$('size').addEventListener('input',e=>{setSz(Number(e.target.value));syncSize();});
+$('qSize').addEventListener('input',e=>{setSz(Number(e.target.value));syncSize();});
 $('opacity').addEventListener('input',e=>{state.opacity=Number(e.target.value);syncOpacity();});
 $('qOpacity').addEventListener('input',e=>{state.opacity=Number(e.target.value);syncOpacity();});
 $('stab').addEventListener('input',e=>{state.stab=Number(e.target.value);$('stabOut').textContent=state.stab+'%';scheduleSave();});
@@ -1532,6 +1598,11 @@ function syncQuick(){
 $('qSnap').onclick=()=>{state.snap=state.snap==='off'?'all':'off';$('snapMode').value=state.snap;
   snapHit=null;syncQuick();scheduleSave();toast(state.snap==='off'?'Snapping off':'Snapping on','ok');};
 $('qLayers').onclick=()=>togglePop('layersPop');
+$('qHome').onclick=()=>homeView();
+$('qAxis').onclick=()=>{state.axisHeld=!state.axisHeld;
+  if(state.axisHeld&&!state.axisSnap){state.axisSnap=true;$('axisSnap').checked=true;}
+  $('qAxis').classList.toggle('on',state.axisHeld);
+  toast(state.axisHeld?'Straight lines on — drag to draw along an axis':'Straight lines off','ok');};
 function syncUI(){
   syncSize();syncOpacity();
   $('stab').value=state.stab;$('stabOut').textContent=state.stab+'%';
@@ -1602,16 +1673,20 @@ function seed(){
 
 function updateRes(){renderer.getDrawingBufferSize(G.uRes.value);}
 function resize(){
-  if(recState.on)return;
+  cacheOv();
+  if(recState.on){if(prevSize){prevSize.w=stage.clientWidth;prevSize.h=stage.clientHeight;}return;}
   const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(w,h,false);
   camera.aspect=w/h;camera.updateProjectionMatrix();updateRes();}
 new ResizeObserver(resize).observe(stage);
 addEventListener('orientationchange',()=>setTimeout(resize,240));
 const ringEl=$('snapRing'),anchorEl=$('anchorMark'),hudDepth=$('hudDepth');
+hudDepth.innerHTML='Sheet <b></b>';const hudDepthB=hudDepth.querySelector('b');
 const _pv=V3();let lastHud='';
+let ovW=1,ovH=1;
+function cacheOv(){ovW=stage.clientWidth||1;ovH=stage.clientHeight||1;}
+const rect={get width(){return ovW;},get height(){return ovH;}};
 function updateOverlays(){
-  const rect=canvas.getBoundingClientRect();
   const pt=draw.active?draw.snapPoint:(snapHit?snapHit.point:null);
   if(pt){
     _pv.copy(pt).project(camera);
@@ -1635,7 +1710,7 @@ function updateOverlays(){
   const dist=Math.abs(V3().subVectors(planePoint(),camera.position).dot(camera.getWorldDirection(V3())));
   const label=(anchorLocked?'pinned':'free')+(state.depth?' '+(state.depth>0?'+':'')+Math.round(state.depth):'')+' · '+dist.toFixed(0);
   if(label!==lastHud){
-    hudDepth.innerHTML='Sheet <b>'+label+'</b>';
+    hudDepthB.textContent=label;
     hudDepth.classList.toggle('locked',anchorLocked);
     lastHud=label;}
   if(gestureHideT&&performance.now()>gestureHideT){$('hudGesture').style.display='none';gestureHideT=0;}}
@@ -1652,6 +1727,7 @@ function loop(){
   if(ghostMesh.visible){
     ghostMesh.position.copy(planePoint());
     ghostMesh.quaternion.copy(camera.quaternion);}
+  if(liveDirty){liveDirty=false;if(draw.active&&draw.mode==='brush')liveRebuild();}
   updateOverlays();
   renderer.render(scene,camera);
   if(recState.on){
@@ -1662,8 +1738,7 @@ function loop(){
 async function boot(){
   resize();syncUI();setPaper('white',true);setTool('brush');renderLayers();syncHistoryUI();syncZoom();loop();
   if(coarse){
-    $('hint').innerHTML='One finger <b>draws</b> · two fingers <em>spin &amp; pinch</em> · three pan';
-    $('verBadge').title='Build 6 — touch routing + legacy settings migration active';}
+    $('hint').innerHTML='One finger <b>draws</b> · two fingers <em>spin &amp; pinch</em> · three pan · start a stroke near a corner to snap';}
   setTimeout(()=>$('hint').classList.add('gone'),14000);
   let restored=false,migrated=false;
   try{
