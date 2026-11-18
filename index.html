@@ -15,7 +15,7 @@
   --ok:#3ddc84; --warn:#ffb02e; --danger:#ff4d5e; --info:#39d0ff;
   --grad:linear-gradient(120deg,var(--violet),var(--magenta) 55%,var(--amber));
   --shadow:0 18px 50px rgba(4,2,12,.5);
-  --quick:128px;
+  --qb:calc(124px + env(safe-area-inset-bottom,0px));
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -33,9 +33,10 @@ body{background:var(--bg0);color:var(--text);font:13px/1.45 -apple-system,"Segoe
 @keyframes drift2{to{transform:translate(-8vw,4vh) scale(1.08)}}
 #app{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;height:100dvh}
 #topbar{flex:0 0 52px;display:flex;align-items:center;gap:7px;padding:0 12px;background:var(--surface);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-.wordmark{font-weight:800;font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;margin-right:4px;white-space:nowrap}
+.wordmark{font-weight:800;font-size:15px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
 .wordmark small{font-weight:500;font-size:10px;letter-spacing:.14em;color:var(--faint);-webkit-text-fill-color:var(--faint);display:block;margin-top:-3px}
-#projName{width:112px;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--dim);padding:5px 8px;font:inherit}
+.ver{flex:0 0 auto;font-size:9.5px;font-weight:800;letter-spacing:.08em;color:#0d2b1a;background:var(--ok);border-radius:6px;padding:2px 6px;box-shadow:0 0 14px rgba(61,220,132,.45)}
+#projName{width:104px;background:transparent;border:1px solid transparent;border-radius:8px;color:var(--dim);padding:5px 8px;font:inherit}
 #projName:hover,#projName:focus{border-color:var(--line);background:rgba(124,58,237,.08);color:var(--text);outline:none}
 .spacer{flex:1}
 button{font:inherit;color:var(--text);background:var(--surface2);border:1px solid var(--line);border-radius:11px;padding:7px 11px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s,box-shadow .15s}
@@ -67,11 +68,13 @@ button:disabled{opacity:.3;cursor:default;transform:none}
 #paper .edge{position:absolute;inset:0;box-shadow:inset 0 0 130px rgba(27,22,38,.07)}
 #paper.dark .edge{box-shadow:inset 0 0 150px rgba(0,0,0,.6)}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:crosshair}
-#hud{position:absolute;left:12px;top:12px;z-index:4;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+#hud{position:absolute;left:12px;top:12px;z-index:4;display:flex;flex-direction:column;gap:6px;pointer-events:none;align-items:flex-start}
 #hud span{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:4px 10px;font-size:11px;color:var(--dim);backdrop-filter:blur(12px);white-space:nowrap;box-shadow:0 6px 18px rgba(4,2,12,.25)}
 #hud b{color:var(--text)}
 #hud .locked{border-color:rgba(57,208,255,.55);color:#bfeaff}
 #hud .locked b{color:var(--cyan)}
+#hudModel{display:none;border-color:rgba(200,240,74,.45)!important;color:#e8f7c4!important}
+#hudModel b{color:var(--acid)!important}
 #snapRing{position:absolute;z-index:4;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:2px solid var(--cyan);pointer-events:none;display:none;box-shadow:0 0 0 4px rgba(57,208,255,.16),0 0 22px rgba(57,208,255,.55);animation:ringpop .18s ease-out}
 @keyframes ringpop{from{transform:scale(.55);opacity:0}}
 #snapRing i{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
@@ -119,6 +122,9 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 #btnLockDepth.on{background:linear-gradient(120deg,rgba(57,208,255,.35),rgba(76,141,255,.35));border-color:rgba(57,208,255,.6);color:#dff4ff}
 .tip{font-size:11px;color:var(--faint);line-height:1.5;margin:-2px 0 8px}
 .tip b{color:var(--cyan)}
+.seg{display:flex;gap:0;border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:rgba(124,58,237,.1)}
+.seg button{flex:1;border:none;border-radius:0;background:transparent;padding:7px 4px;font-size:11px;color:var(--dim)}
+.seg button.on{background:var(--grad);color:#fff;font-weight:700}
 #sv{width:100%;height:112px;border-radius:12px;cursor:crosshair;display:block;touch-action:none;border:1px solid var(--line)}
 #hue{width:100%;height:16px;margin:9px 0 7px;border-radius:8px;appearance:none;-webkit-appearance:none;background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer}
 #hue::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid rgba(0,0,0,.55)}
@@ -141,17 +147,17 @@ input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;bac
 #viewPad button small{font-size:8px}
 #viewPad button:hover{background:var(--surface3);color:var(--text)}
 #viewPad button.on{background:var(--grad);color:#fff}
-/* mobile quick bar */
-#quickBar{display:none;position:absolute;left:0;right:0;bottom:0;z-index:7;height:var(--quick);flex-direction:column;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line2);box-shadow:0 -12px 34px rgba(4,2,12,.4)}
+#quickBar{display:none;position:absolute;left:0;right:0;bottom:0;z-index:7;height:var(--qb);flex-direction:column;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--surface);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line2);box-shadow:0 -12px 34px rgba(4,2,12,.4)}
 #quickBar .qrow{display:flex;align-items:center;gap:6px}
 #qBrushes{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
-#qBrushes button{padding:4px 2px;border-radius:9px;font-size:10px;color:var(--dim)}
-#qBrushes button.active{background:var(--grad);border-color:transparent;color:#fff}
+#qBrushes button{padding:6px 2px;border-radius:9px;font-size:10px;color:var(--dim)}
+#qBrushes button.active{background:var(--grad);border-color:transparent;color:#fff;font-weight:700}
 #quickBar label{font-size:9.5px;letter-spacing:.08em;color:var(--faint);font-weight:700;flex:0 0 auto}
 #quickBar input[type=range]{height:26px}
-#quickBar .qbtns button{flex:1;padding:8px 2px;border-radius:10px;font-size:11px;color:var(--dim)}
-#quickBar .qbtns button.on{background:linear-gradient(120deg,rgba(57,208,255,.35),rgba(76,141,255,.35));border-color:rgba(57,208,255,.6);color:#dff4ff}
-#quickBar .qbtns button.hot{background:var(--grad);border-color:transparent;color:#fff}
+#qMode{flex:1.5}
+#qMode button{padding:8px 2px;font-size:11px}
+#quickBar .qbtns>button{flex:1;padding:8px 2px;border-radius:10px;font-size:11px;color:var(--dim)}
+#quickBar .qbtns>button.on{background:linear-gradient(120deg,rgba(57,208,255,.35),rgba(76,141,255,.35));border-color:rgba(57,208,255,.6);color:#dff4ff}
 .pop{position:absolute;top:12px;width:284px;z-index:9;background:var(--surface);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border:1px solid var(--line2);border-radius:18px;box-shadow:var(--shadow);padding:13px;display:none;max-height:calc(100% - 24px);overflow-y:auto}
 .pop.open{display:block;animation:popin .18s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes popin{from{opacity:0;transform:translateY(-8px) scale(.97)}}
@@ -212,26 +218,28 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
   #quickBar{display:flex}
   #viewPad{display:none}
   #brushChip{display:none}
-  #dock{top:auto;left:8px;right:8px;bottom:calc(var(--quick) + 8px);width:auto;padding:0 12px 12px;border-radius:18px;max-height:44px;overflow:hidden;transition:max-height .28s cubic-bezier(.2,.8,.2,1)}
-  #dock.open{max-height:min(52vh,430px);overflow-y:auto}
-  #dockTab{display:flex;position:sticky;top:0;margin:0 -12px 8px;height:44px;flex:0 0 44px;align-items:center;justify-content:center;gap:8px;background:transparent;border:none;color:var(--dim);font-size:10.5px;letter-spacing:.16em;font-weight:700;z-index:2}
+  #hudModel{display:block}
+  #dock{top:auto;left:8px;right:8px;bottom:calc(var(--qb) + 8px);width:auto;padding:0 12px 12px;border-radius:18px;max-height:44px;overflow:hidden;transition:max-height .28s cubic-bezier(.2,.8,.2,1)}
+  #dock.open{max-height:min(50vh,420px);overflow-y:auto}
+  #dockTab{display:flex;position:sticky;top:0;margin:0 -12px 8px;height:44px;align-items:center;justify-content:center;gap:8px;background:transparent;border:none;color:var(--dim);font-size:10.5px;letter-spacing:.16em;font-weight:700;z-index:2}
   #dockTab::after{content:"▲";font-size:9px}
   #dock.open #dockTab::after{content:"▼"}
-  #vsliders{top:auto;bottom:calc(var(--quick) + 18px);transform:none;gap:14px}
-  .vs .track{height:92px;width:28px}
+  #vsliders{top:auto;bottom:calc(var(--qb) + 18px);transform:none;gap:14px}
+  .vs .track{height:88px;width:28px}
   .vs .glyph{font-size:9px}
-  .pop{top:auto;bottom:calc(var(--quick) + 8px);left:8px;right:8px;width:auto;max-height:min(56vh,440px)}
-  #hint{bottom:calc(var(--quick) + 18px);left:auto;right:10px;transform:none;max-width:60vw;white-space:normal;text-align:right;font-size:10.5px;padding:7px 12px;border-radius:14px}
+  .pop{top:auto;bottom:calc(var(--qb) + 8px);left:8px;right:8px;width:auto;max-height:min(54vh,430px)}
+  #hint{bottom:calc(var(--qb) + 18px);left:auto;right:10px;transform:none;max-width:58vw;white-space:normal;text-align:right;font-size:10.5px;padding:7px 12px;border-radius:14px}
   #hud span{font-size:10px;padding:3px 8px}
   dialog{padding:18px 16px}
   dialog table{font-size:11px}
 }
-@media (max-width:420px){
+@media (max-width:430px){
   #topbar{gap:4px;padding:0 8px}
-  .iconbtn{width:34px;height:34px;border-radius:10px}
+  .iconbtn{width:33px;height:33px;border-radius:10px}
   .iconbtn svg{width:17px;height:17px}
-  #colorDot{width:26px;height:26px}
+  #colorDot{width:25px;height:25px}
   .wordmark{font-size:13px}
+  .ver{font-size:9px;padding:2px 5px}
 }
 </style>
 </head>
@@ -240,6 +248,7 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
 <div id="app">
   <header id="topbar">
     <div class="wordmark">InkSpace<small>DRAW IN 3D</small></div>
+    <span class="ver" id="verBadge" title="Build 6 — touch routing + settings migration">v6</span>
     <input id="projName" type="text" value="Untitled" spellcheck="false">
     <button class="iconbtn" id="btnUndo" title="Undo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 5L3 10l5 5"/><path d="M3 10h11a6 6 0 0 1 0 12h-4"/></svg></button>
     <button class="iconbtn" id="btnRedo" title="Redo" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 5l5 5-5 5"/><path d="M21 10H10a6 6 0 0 0 0 12h4"/></svg></button>
@@ -256,7 +265,12 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
   <div id="stage">
     <div id="paper"><div class="wash w1"></div><div class="wash w2"></div><div class="wash w3"></div><div class="fiber"></div><div class="edge"></div></div>
     <canvas id="gl"></canvas>
-    <div id="hud"><span id="hudTool"><b>Brush</b> · Ink</span><span id="hudDepth">Sheet <b>free</b></span><span id="hudGesture" style="display:none"></span></div>
+    <div id="hud">
+      <span id="hudTool"><b>Brush</b> · Ink</span>
+      <span id="hudDepth">Sheet <b>free</b></span>
+      <span id="hudModel"><b>1</b> draw · <b>2</b> spin+pinch · <b>3</b> pan</span>
+      <span id="hudGesture" style="display:none"></span>
+    </div>
     <div id="snapRing"><i></i><b>corner</b></div>
     <div id="anchorMark"></div>
     <div id="vsliders">
@@ -279,7 +293,9 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
       <div class="ctl"><label>Grain</label><input type="range" id="grain" min="0" max="100" value="35"><output id="grainOut">35%</output></div>
       <label class="check"><input type="checkbox" id="pressure" checked> Pen pressure → size</label>
       <label class="check"><input type="checkbox" id="pressureAlpha"> Pen pressure → opacity</label>
-      <label class="check"><input type="checkbox" id="finger" checked> One finger draws (touch)</label>
+      <h3>TOUCH</h3>
+      <div class="tip">One finger draws, two fingers spin &amp; pinch-zoom, three fingers pan. Switch below if you prefer one finger to spin.</div>
+      <div class="seg" id="dockMode" style="margin-bottom:9px"><button data-finger="1">✏️ One finger draws</button><button data-finger="0">🖐 One finger spins</button></div>
       <h3>SNAP &amp; DEPTH</h3>
       <div class="tip">Hover existing ink — <b>corners glow</b>. Start there and the drawing sheet passes through that exact 3D point.</div>
       <div class="ctl"><label>Snap to</label><select id="snapMode"><option value="all">Corners + points</option><option value="corners">Corners &amp; ends</option><option value="off">Off</option></select></div>
@@ -314,6 +330,7 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
       <div id="recents"></div>
       <h3>ACTIONS</h3>
       <div class="actionrow"><button id="btnReset">Reset</button><button id="btnShuffle">Shuffle</button><button id="btnPng" class="png">PNG ↓</button></div>
+      <div class="viewrow" style="margin-top:8px"><button id="btnFixTouch">🔧 Reset touch mode</button><button id="btnHelp2">⌨️ Help</button></div>
     </aside>
 
     <div id="viewPad">
@@ -325,9 +342,9 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
       <div class="qrow" id="qBrushes"></div>
       <div class="qrow"><label>SIZE</label><input type="range" id="qSize" min="1" max="120" value="18"><label>OPAC</label><input type="range" id="qOpacity" min="5" max="100" value="100"></div>
       <div class="qrow qbtns">
+        <div class="seg" id="qMode"><button data-finger="1">✏️ Draw</button><button data-finger="0">🖐 Spin</button></div>
         <button id="qSpinL">⟲90°</button><button id="qSpinR">⟳90°</button>
-        <button id="qSnap" class="on">⊙ Snap</button><button id="qErase">⌫</button>
-        <button id="qLayers">☰</button><button id="qStudio">Studio</button>
+        <button id="qSnap" class="on">⊙</button><button id="qLayers">☰</button>
       </div>
     </div>
 
@@ -361,8 +378,8 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
 </div>
 <dialog id="help">
   <h2>Draw. Spin. Snap. Draw again.</h2>
+  <div class="cube"><b>Touch:</b> one finger draws · two fingers spin &amp; pinch-zoom · three fingers pan. The <b>Draw / Spin</b> switch in the bottom bar changes what one finger does.</div>
   <div class="cube"><b>Cube:</b> draw the front square → spin 90° → hover a corner until it <b>glows magenta</b> → draw from there. The sheet passes through that exact 3D corner, so faces join. Hold <b>Shift</b> for a straight axis-locked edge.</div>
-  <div class="sub"><b>Touch:</b> one finger draws · two fingers spin &amp; pinch-zoom · three fingers pan.</div>
   <table>
     <tr><td>Hover ink</td><td>corners glow — drawing starts exactly there</td></tr>
     <tr><td>Shift + drag</td><td>straight line locked to nearest X / Y / Z</td></tr>
@@ -392,6 +409,7 @@ dialog .close{margin-top:14px;background:var(--grad);border:none;color:#fff;font
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+const SCHEMA=6;
 const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -410,7 +428,7 @@ function hexToHsv(hex){const n=parseInt(hex.slice(1),16),r=(n>>16&255)/255,g=(n>
   return [((h%360)+360)%360,mx?d/mx:0,mx];}
 function colorLin(hex){const c=new THREE.Color(hex).convertSRGBToLinear();return [c.r,c.g,c.b];}
 const lum=hex=>{const n=parseInt(hex.slice(1),16);return (0.2126*(n>>16&255)+0.7152*(n>>8&255)+0.0722*(n&255))/255;};
-const isTouchDevice=matchMedia('(pointer:coarse)').matches;
+const coarse=matchMedia('(pointer:coarse)').matches;
 
 const BRUSHES=[
   {name:'Ink',mode:0,soft:.22,add:false,floor:.06,mul:1.0},
@@ -421,7 +439,7 @@ const BRUSHES=[
 const state={tool:'brush',brush:0,size:18,opacity:100,stab:45,taper:65,grain:35,
   pressure:true,pressureAlpha:false,finger:true,whole:false,erPx:26,color:'#1b1626',
   depth:0,ghost:true,muted:false,space:false,paper:'white',autoSpin:false,spinSpeed:30,
-  snap:'all',snapRadius:isTouchDevice?30:22,keepDepth:true,axisSnap:true,showAnchor:true};
+  snap:'all',snapRadius:coarse?30:22,keepDepth:true,axisSnap:true,showAnchor:true};
 const halfWidth=()=>state.size*0.06*BRUSHES[state.brush].mul;
 const paperHex=()=>state.paper==='dark'?'#0c0a13':state.paper==='cream'?'#fbf6ec':'#ffffff';
 let autoAnim=false,orderCounter=0;
@@ -628,8 +646,7 @@ function applyCmd(c,f){switch(c.type){
   case 'layerOp':{const l=layers.find(x=>x.id===c.id);if(l){l.opacity=f?c.after:c.before;setLayerVisuals(l);}break;}
   case 'layerRename':{const l=layers.find(x=>x.id===c.id);if(l)l.name=f?c.after:c.before;break;}
   case 'compound': if(f)c.cmds.forEach(x=>applyCmd(x,true));else for(let i=c.cmds.length-1;i>=0;i--)applyCmd(c.cmds[i],false);break;}}
-function syncHistoryUI(){
-  $('btnUndo').disabled=!undoStack.length;$('btnRedo').disabled=!redoStack.length;}
+function syncHistoryUI(){$('btnUndo').disabled=!undoStack.length;$('btnRedo').disabled=!redoStack.length;}
 function afterMutate(){syncHistoryUI();scheduleSave();renderLayers();}
 function doCmd(c){applyCmd(c,true);undoStack.push(c);if(undoStack.length>120)undoStack.shift();redoStack.length=0;afterMutate();}
 function pushApplied(c){undoStack.push(c);if(undoStack.length>120)undoStack.shift();redoStack.length=0;afterMutate();}
@@ -859,7 +876,6 @@ function eraseAt(cx,cy){
     applyCmd(op,true);draw.eraseOps.push(op);}}
 function endErase(){if(draw.eraseOps.length)pushApplied({type:'compound',cmds:draw.eraseOps.slice()});draw.eraseOps=[];}
 
-/* ---- camera ---- */
 let camTween=null,userDragging=false;
 const SNAPS={front:V3(0,0,1),back:V3(0,0,-1),left:V3(-1,0,0),right:V3(1,0,0),
   top:V3(0,1,.0001),bottom:V3(0,-1,.0001),iso:V3(1,.75,1),iso2:V3(-1,.6,1)};
@@ -943,9 +959,9 @@ controls.addEventListener('start',()=>{userDragging=true;camTween=null;ghostUnti
 controls.addEventListener('end',()=>{userDragging=false;});
 controls.addEventListener('change',()=>{ghostUntil=Math.max(ghostUntil,performance.now()+450);});
 
-/* ================= TOUCH GESTURE ENGINE (owns all touch pointers) ================= */
+/* ============ touch engine — owns every touch pointer ============ */
 const touches=new Map();
-let gesture=null,drawTouchId=null;
+let gesture=null,drawTouchId=null,gestureHideT=0;
 function centroid(){let x=0,y=0;for(const p of touches.values()){x+=p.x;y+=p.y;}return {x:x/touches.size,y:y/touches.size};}
 function spread(){
   const a=[...touches.values()];if(a.length<2)return 1;
@@ -956,6 +972,8 @@ function makeGesture(){
   const c=centroid();
   return {mode:touches.size>=3?'pan':'orbit',cx:c.x,cy:c.y,dist:spread(),
     sph:sphOf(),target:controls.target.clone(),d:camDist()};}
+function showGesture(txt){
+  const el=$('hudGesture');el.textContent=txt;el.style.display='';gestureHideT=performance.now()+1000;}
 function applyGesture(){
   if(!gesture)return;
   const c=centroid(),sp=spread();
@@ -968,6 +986,7 @@ function applyGesture(){
     const t=gesture.target.clone().addScaledVector(right,-dx*k).addScaledVector(up,dy*k);
     controls.target.copy(t);
     camera.position.copy(t).add(V3().setFromSpherical(gesture.sph));
+    showGesture(touches.size+' fingers · pan');
   }else{
     const s=gesture.sph.clone();
     s.theta-=dx/Math.max(1,rect.width)*Math.PI*1.7;
@@ -975,16 +994,19 @@ function applyGesture(){
     s.radius=clamp(gesture.d*(gesture.dist/sp),controls.minDistance,controls.maxDistance);
     controls.target.copy(gesture.target);
     camera.position.copy(gesture.target).add(V3().setFromSpherical(s));
+    showGesture(touches.size===1?'1 finger · spin':'2 fingers · spin + pinch');
   }
   camera.lookAt(controls.target);
-  camTween=null;ghostUntil=performance.now()+700;
-  showGesture(gesture.mode==='pan'?'3 fingers · pan':'2 fingers · spin + pinch');}
-let gestureHideT=0;
-function showGesture(txt){
-  const el=$('hudGesture');el.textContent=txt;el.style.display='';gestureHideT=performance.now()+900;}
-function touchBlocked(){return autoAnim&&anim&&anim.type==='orbit';}
+  camTween=null;ghostUntil=performance.now()+700;}
+const touchBlocked=()=>autoAnim&&anim&&anim.type==='orbit';
+function dropTouch(id){
+  touches.delete(id);
+  if(id===drawTouchId){endStroke();drawTouchId=null;}
+  if(touches.size>=2)gesture=makeGesture();
+  else if(touches.size===1){gesture=makeGesture();gesture.mode='orbit';}
+  else gesture=null;}
 
-/* ================= unified pointer router ================= */
+/* ============ pointer router ============ */
 function takesPenMouse(e){
   if(autoAnim||camTween)return false;
   if(state.tool==='spin')return false;
@@ -1008,6 +1030,7 @@ stage.addEventListener('pointerdown',e=>{
         draw.mode=state.tool==='eraser'?'erase':'brush';
         ensureAudio();
         if(draw.mode==='erase')beginErase(e);else beginStroke(e);
+        showGesture('drawing · add a 2nd finger to spin');
       }else{
         gesture=makeGesture();gesture.mode='orbit';
         showGesture('1 finger · spin');
@@ -1045,27 +1068,25 @@ stage.addEventListener('pointermove',e=>{
     const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
     for(const s of (evs.length?evs:[e])){if(draw.mode==='erase')eraseAt(s.clientX,s.clientY);else appendSample(s);}
     return;}
-  if(e.target===canvas&&state.tool==='brush'&&!autoAnim&&e.pointerType==='mouse'){
-    snapHit=findSnap(e.clientX,e.clientY,null);
-    if(snapHit)ghostUntil=Math.max(ghostUntil,performance.now()+260);}
-  else if(e.pointerType==='mouse')snapHit=null;
+  if(e.pointerType==='mouse'){
+    if(e.target===canvas&&state.tool==='brush'&&!autoAnim){
+      snapHit=findSnap(e.clientX,e.clientY,null);
+      if(snapHit)ghostUntil=Math.max(ghostUntil,performance.now()+260);}
+    else snapHit=null;}
 },{capture:true});
 
 function releasePointer(e){
   if(e.pointerType==='touch'&&touches.has(e.pointerId)){
     e.stopPropagation();
-    touches.delete(e.pointerId);
     try{stage.releasePointerCapture(e.pointerId);}catch(_){}
-    if(e.pointerId===drawTouchId){endStroke();drawTouchId=null;}
-    if(touches.size>=2)gesture=makeGesture();
-    else if(touches.size===1){gesture=makeGesture();gesture.mode='orbit';}
-    else gesture=null;
-    return;}
+    dropTouch(e.pointerId);return;}
   if(draw.active&&e.pointerId===draw.id){
     e.stopPropagation();endStroke();
     try{stage.releasePointerCapture(e.pointerId);}catch(_){}}}
 stage.addEventListener('pointerup',releasePointer,{capture:true});
 stage.addEventListener('pointercancel',releasePointer,{capture:true});
+stage.addEventListener('lostpointercapture',e=>{
+  if(e.pointerType==='touch'&&touches.has(e.pointerId))dropTouch(e.pointerId);},{capture:true});
 stage.addEventListener('pointerleave',e=>{if(!draw.active&&e.pointerType==='mouse')snapHit=null;});
 stage.addEventListener('wheel',e=>{
   if(e.target!==canvas||!e.shiftKey)return;
@@ -1111,7 +1132,27 @@ window.addEventListener('keydown',e=>{
   else if(k>='1'&&k<='5')selectBrush(Number(k)-1);
   else if(k==='['||k===']'){state.size=clamp(state.size*(k===']'?1.15:1/1.15),1,120);syncSize();}});
 window.addEventListener('keyup',e=>{if(e.code==='Space'){state.space=false;controls.mouseButtons.LEFT=state.tool==='spin'?THREE.MOUSE.ROTATE:null;}});
-window.addEventListener('blur',()=>{endStroke();drawTouchId=null;touches.clear();gesture=null;});
+function panic(){endStroke();drawTouchId=null;touches.clear();gesture=null;}
+window.addEventListener('blur',panic);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)panic();});
+
+function setFinger(on,announce){
+  state.finger=!!on;
+  if(state.finger&&state.tool==='spin')setTool('brush');
+  document.querySelectorAll('#qMode button,#dockMode button').forEach(b=>
+    b.classList.toggle('on',(b.dataset.finger==='1')===state.finger));
+  $('hudModel').innerHTML=state.finger
+    ?'<b>1</b> draw · <b>2</b> spin+pinch · <b>3</b> pan'
+    :'<b>1</b> spin · <b>2</b> pinch · <b>3</b> pan';
+  scheduleSave();
+  if(announce)toast(state.finger?'One finger draws · two fingers spin + pinch':'One finger spins · switch to Draw to sketch','ok');}
+document.querySelectorAll('#qMode button,#dockMode button').forEach(b=>
+  b.addEventListener('click',()=>setFinger(b.dataset.finger==='1',true)));
+$('btnFixTouch').onclick=()=>{setFinger(true,false);setTool('brush');state.snapRadius=coarse?30:22;
+  $('snapRadius').value=state.snapRadius;$('snapRadiusOut').textContent=state.snapRadius+' px';
+  state.snap='all';$('snapMode').value='all';syncQuick();scheduleSave();
+  toast('Touch mode reset — one finger draws','ok');};
+$('btnHelp2').onclick=()=>{$('help').showModal();closePops();};
 
 function insertFace(quiet){
   const center=planePoint();
@@ -1131,11 +1172,10 @@ $('btnCubeDemo').onclick=()=>{
   toast('Front face ready · spin 90° then draw from a magenta corner','ok');
   $('hint').classList.remove('gone');};
 
-/* ---- record ---- */
 let anim=null,entrance=null;
 function startTurntable(T){anim={type:'orbit',t0:performance.now(),T:T*1000,
   off:V3().subVectors(camera.position,controls.target),target:controls.target.clone()};
-  autoAnim=true;controls.enabled=false;camTween=null;}
+  autoAnim=true;controls.enabled=false;camTween=null;panic();}
 function startTimelapse(T){if(!allStrokes.length){toast('Draw something first','warn');return false;}
   G.uProgress.value=0;anim={type:'reveal',t0:performance.now(),T:T*1000};autoAnim=true;return true;}
 function endAnim(){if(!anim)return;if(anim.type==='reveal')G.uProgress.value=1;
@@ -1218,7 +1258,7 @@ function idbOpen(){return new Promise((res,rej)=>{const r=indexedDB.open('inkspa
 function kvGet(k){return new Promise((res,rej)=>{const t=db.transaction('kv').objectStore('kv').get(k);t.onsuccess=()=>res(t.result);t.onerror=()=>rej(t.error);});}
 function kvSet(k,v){return new Promise((res,rej)=>{const t=db.transaction('kv','readwrite').objectStore('kv').put(v,k);t.onsuccess=()=>res();t.onerror=()=>rej(t.error);});}
 function kvKeys(){return new Promise((res,rej)=>{const t=db.transaction('kv').objectStore('kv').getAllKeys();t.onsuccess=()=>res(t.result);t.onerror=()=>rej(t.error);});}
-function serialize(){return {version:5,name:$('projName').value,
+function serialize(){return {version:SCHEMA,name:$('projName').value,
   strokes:allStrokes.map(s=>({layer:s.layer,brush:s.brush,color:s.color,size:s.size,opacity:s.opacity,
     pts:Array.from(s.pts),w:Array.from(s.w),a:Array.from(s.a),order:s.order})),
   layers:layers.map(l=>({id:l.id,name:l.name,visible:l.visible,opacity:l.opacity})),
@@ -1237,14 +1277,25 @@ function clearScene(){
   undoStack.length=0;redoStack.length=0;orderCounter=0;G.uOrderMax.value=1;
   anchorLocked=false;sessionAnchor=null;snapHit=null;
   liveMesh.material=getMat('x',0);}
+function migrate(d){
+  const v=d.version||0;
+  if(v<SCHEMA){
+    state.finger=true;
+    state.snapRadius=coarse?30:22;
+    if(!state.snap||state.snap==='off')state.snap='all';
+    return true;}
+  if(typeof state.finger!=='boolean')state.finger=true;
+  return false;}
 function deserialize(d){
-  if(!d||d.version<2)throw new Error('Unsupported file');
+  if(!d||(d.version||0)<2)throw new Error('Unsupported file');
   clearScene();
-  layers=d.layers.map(l=>({id:l.id,name:l.name,visible:l.visible,opacity:l.opacity}));
-  lid=layers.length+1;activeLayerId=d.activeLayerId||layers[0]?.id;
+  layers=(d.layers||[]).map(l=>({id:l.id,name:l.name,visible:l.visible!==false,opacity:typeof l.opacity==='number'?l.opacity:1}));
+  if(!layers.length){const l=newLayer('Layer 1');layers.push(l);}
+  lid=layers.length+1;activeLayerId=d.activeLayerId||layers[0].id;
   if(d.settings)Object.assign(state,d.settings);
+  const migrated=migrate(d);
   setPaper(state.paper||'white',true);
-  for(const s of d.strokes){
+  for(const s of d.strokes||[]){
     const st={id:'s'+(++sid)+Date.now().toString(36),layer:s.layer,brush:s.brush,color:s.color,size:s.size,
       opacity:s.opacity,pts:new Float32Array(s.pts),w:new Float32Array(s.w),a:new Float32Array(s.a),order:s.order};
     buildStrokeGeo(st);addStroke(st);}
@@ -1253,7 +1304,8 @@ function deserialize(d){
   if(d.anchor){anchorLocked=!!d.anchor.locked;depthAnchor.fromArray(d.anchor.p);}
   if(d.name)$('projName').value=d.name;
   for(const l of layers)setLayerVisuals(l);
-  syncUI();renderLayers();syncHistoryUI();scheduleSave();G.uProgress.value=1;camTween=null;}
+  syncUI();renderLayers();syncHistoryUI();scheduleSave();G.uProgress.value=1;camTween=null;
+  return migrated;}
 let saveTimer=null;
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{
   try{await kvSet('autosave',serialize());}catch(_){}},1200);}
@@ -1268,7 +1320,7 @@ async function refreshProjects(sel){try{
 $('projName').addEventListener('change',scheduleSave);
 $('btnSave').onclick=saveNamed;
 $('projList').onchange=async e=>{if(!e.target.value)return;
-  try{deserialize(await kvGet(e.target.value));toast('Project loaded','ok');closePops();}
+  try{const m=deserialize(await kvGet(e.target.value));toast(m?'Project loaded · touch mode migrated':'Project loaded','ok');closePops();}
   catch(err){toast('Load failed: '+err.message,'err');}};
 $('btnNew').onclick=()=>{if(!confirm('Start a new canvas?'))return;
   clearScene();const l=newLayer('Layer 1');layers.push(l);activeLayerId=l.id;
@@ -1279,7 +1331,7 @@ $('btnExportJson').onclick=()=>download(new Blob([JSON.stringify(serialize())],{
   ($('projName').value||'inkspace')+'.inkspace.json');
 $('btnImport').onclick=()=>$('importFile').click();
 $('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;
-  try{deserialize(JSON.parse(await f.text()));toast('Imported '+f.name,'ok');closePops();}
+  try{const m=deserialize(JSON.parse(await f.text()));toast(m?'Imported · touch mode migrated':'Imported '+f.name,'ok');closePops();}
   catch(err){toast('Import failed: '+err.message,'err');}e.target.value='';};
 function exportPNG(){
   renderer.render(scene,camera);
@@ -1415,7 +1467,7 @@ function setColor(hex,fromPicker){
 function svPick(e){const r=svCanvas.getBoundingClientRect();
   hsv[1]=clamp((e.clientX-r.left)/r.width,0,1);hsv[2]=clamp(1-(e.clientY-r.top)/r.height,0,1);
   setColor(hsvToHex(hsv[0],hsv[1],hsv[2]),true);}
-svCanvas.addEventListener('pointerdown',e=>{svCanvas.setPointerCapture(e.pointerId);svPick(e);});
+svCanvas.addEventListener('pointerdown',e=>{e.stopPropagation();svCanvas.setPointerCapture(e.pointerId);svPick(e);});
 svCanvas.addEventListener('pointermove',e=>{if(e.buttons)svPick(e);});
 $('hue').addEventListener('input',e=>{hsv[0]=Number(e.target.value);setColor(hsvToHex(hsv[0],hsv[1],hsv[2]),true);});
 $('hex').addEventListener('change',e=>{let v=e.target.value.trim();if(!v.startsWith('#'))v='#'+v;
@@ -1435,7 +1487,7 @@ $('btnShuffle').onclick=()=>{
   palette=palette.slice(0,12);buildSwatches();
   setColor(palette[2+Math.floor(Math.random()*8)]);toast('Palette shuffled','ok');};
 $('colorDot').onclick=()=>{if(innerWidth<=900)$('dock').classList.add('open');else $('hex').focus();};
-$('dockTab').onclick=()=>$('dock').classList.toggle('open');
+$('dockTab').onclick=()=>{$('dock').classList.toggle('open');};
 function bindVS(id,get,set,fmt){
   const el=$(id),track=el.querySelector('.track'),fill=el.querySelector('.fill'),
     thumb=el.querySelector('.thumb'),bubble=el.querySelector('.bubble');
@@ -1467,8 +1519,6 @@ $('taper').addEventListener('input',e=>{state.taper=Number(e.target.value);$('ta
 $('grain').addEventListener('input',e=>{state.grain=Number(e.target.value);$('grainOut').textContent=state.grain+'%';G.uGrain.value=state.grain/100;scheduleSave();});
 $('pressure').addEventListener('change',e=>{state.pressure=e.target.checked;scheduleSave();});
 $('pressureAlpha').addEventListener('change',e=>{state.pressureAlpha=e.target.checked;scheduleSave();});
-$('finger').addEventListener('change',e=>{state.finger=e.target.checked;scheduleSave();
-  toast(state.finger?'One finger draws · two spin':'One finger spins','ok');});
 $('depth').addEventListener('input',e=>{state.depth=Number(e.target.value);$('depthOut').textContent=state.depth;ghostUntil=performance.now()+900;scheduleSave();});
 $('ghost').addEventListener('change',e=>{state.ghost=e.target.checked;scheduleSave();});
 $('btnReset').onclick=()=>{
@@ -1476,24 +1526,24 @@ $('btnReset').onclick=()=>{
   anchorLocked=false;setAutoSpin(false);G.uGrain.value=state.grain/100;syncUI();homeView();toast('Reset brush & view','ok');};
 function syncQuick(){
   $('qSnap').classList.toggle('on',state.snap!=='off');
-  $('qErase').classList.toggle('hot',state.tool==='eraser');
-  $('qStudio').classList.toggle('hot',$('dock').classList.contains('open'));}
+  $('qSnap').textContent=state.snap!=='off'?'⊙':'⊘';
+  document.querySelectorAll('#qMode button,#dockMode button').forEach(b=>
+    b.classList.toggle('on',(b.dataset.finger==='1')===state.finger));}
 $('qSnap').onclick=()=>{state.snap=state.snap==='off'?'all':'off';$('snapMode').value=state.snap;
   snapHit=null;syncQuick();scheduleSave();toast(state.snap==='off'?'Snapping off':'Snapping on','ok');};
-$('qErase').onclick=()=>setTool(state.tool==='eraser'?'brush':'eraser');
 $('qLayers').onclick=()=>togglePop('layersPop');
-$('qStudio').onclick=()=>{$('dock').classList.toggle('open');syncQuick();};
 function syncUI(){
   syncSize();syncOpacity();
   $('stab').value=state.stab;$('stabOut').textContent=state.stab+'%';
   $('taper').value=state.taper;$('taperOut').textContent=state.taper+'%';
   $('grain').value=state.grain;$('grainOut').textContent=state.grain+'%';G.uGrain.value=state.grain/100;
-  $('pressure').checked=state.pressure;$('pressureAlpha').checked=state.pressureAlpha;$('finger').checked=state.finger;
+  $('pressure').checked=state.pressure;$('pressureAlpha').checked=state.pressureAlpha;
   $('ghost').checked=state.ghost;
   $('snapMode').value=state.snap;$('snapRadius').value=state.snapRadius;$('snapRadiusOut').textContent=state.snapRadius+' px';
   $('keepDepth').checked=state.keepDepth;$('axisSnap').checked=state.axisSnap;$('showAnchor').checked=state.showAnchor;
   $('spinSpeed').value=state.spinSpeed;$('spinSpeedOut').textContent=state.spinSpeed+'°/s';
-  syncDepthUI();setPaper(state.paper,true);setColor(state.color);buildBrushChips();buildSwatches();updateChip();updateSoundIcon();syncQuick();}
+  syncDepthUI();setPaper(state.paper,true);setColor(state.color);buildBrushChips();buildSwatches();
+  setFinger(state.finger,false);updateChip();updateSoundIcon();syncQuick();}
 
 let audio=null;
 function ensureAudio(){
@@ -1557,7 +1607,7 @@ function resize(){
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(w,h,false);
   camera.aspect=w/h;camera.updateProjectionMatrix();updateRes();}
 new ResizeObserver(resize).observe(stage);
-addEventListener('orientationchange',()=>setTimeout(resize,220));
+addEventListener('orientationchange',()=>setTimeout(resize,240));
 const ringEl=$('snapRing'),anchorEl=$('anchorMark'),hudDepth=$('hudDepth');
 const _pv=V3();let lastHud='';
 function updateOverlays(){
@@ -1611,19 +1661,24 @@ function loop(){
     $('recTime').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}}
 async function boot(){
   resize();syncUI();setPaper('white',true);setTool('brush');renderLayers();syncHistoryUI();syncZoom();loop();
-  if(isTouchDevice){
-    $('hint').innerHTML='One finger <b>draws</b> · two fingers <em>spin &amp; pinch</em> · three pan · tap a glowing corner to join faces';
-    toast('One finger draws · two fingers spin + pinch','ok');}
+  if(coarse){
+    $('hint').innerHTML='One finger <b>draws</b> · two fingers <em>spin &amp; pinch</em> · three pan';
+    $('verBadge').title='Build 6 — touch routing + legacy settings migration active';}
   setTimeout(()=>$('hint').classList.add('gone'),14000);
-  let restored=false;
+  let restored=false,migrated=false;
   try{
     await idbOpen();await refreshProjects();
     const d=await kvGet('autosave');
-    if(d&&d.strokes&&d.strokes.length){deserialize(d);restored=true;toast('Restored your canvas','ok');}
+    if(d&&d.strokes&&d.strokes.length){migrated=deserialize(d);restored=true;}
   }catch(_){toast('Autosave unavailable — use Export JSON','warn');}
-  if(!restored){
-    if(!layers.length)seed();
-    G.uProgress.value=0;entrance={t0:performance.now(),dur:1900};}}
+  if(!restored&&!layers.length)seed();
+  if(!restored){G.uProgress.value=0;entrance={t0:performance.now(),dur:1900};}
+  setFinger(state.finger,false);
+  if(migrated){
+    toast('Saved settings were from an older build — touch mode migrated to “one finger draws”','ok');
+    try{await kvSet('autosave',serialize());}catch(_){}
+  }else if(restored)toast('Restored your canvas','ok');
+  if(coarse&&!restored)toast('One finger draws · two fingers spin + pinch','ok');}
 boot();
 </script>
 </body>
